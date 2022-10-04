@@ -117,12 +117,15 @@ if nargout>0
     Audium = SAudio;
     Audium.time_data = output_mic;
     Audium.c0 = sArgs('c0');
+    Audium.Fs = sArgs('Fs');
     varargout{1} = Audium;
 end
 %%%% Source data %%%%%
 if nargout>1
     for i =1:1:n_sources
         sources{i}.time_data = s(i,:);
+        sources{i}.Fs = sArgs('Fs');
+        sources{i}.c0 = sArgs('c0');
     end
     varargout{2} = sources;
 end
