@@ -125,7 +125,6 @@ if nargout>1
     for i =1:1:n_sources
         sources{i}.time_data = s(i,:);
         sources{i}.Fs = sArgs('Fs');
-        sources{i}.c0 = sArgs('c0');
     end
     varargout{2} = sources;
 end
