@@ -21,10 +21,10 @@ classdef Source < master_mvs
             s = zeros(1,n_bins);
             %%%%%%%% Audio data %%%%%%%%%%%%%%%%%%
             if isempty(obj.time_data)==0
-                [audio_n_bins, ~] = size(obj.time_data);
+                [~, audio_n_bins] = size(obj.time_data);
                 
                 if n_bins > audio_n_bins
-                    error(strcat(["Time=", time_total," is major than Audio time length = ", audio_n_bins*obj.Fs, ...
+                    error(strjoin(["Time=", time_total," is major than Audio time length = ", audio_n_bins/obj.Fs, ...
                         ". If you need to simulate for this case, manually increase the audio", ...
                         "time vector and use the AudioInput argument to create the Source. Eg: Source('AudioInput', audio_vector)"]))
                 end
