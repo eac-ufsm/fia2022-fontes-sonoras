@@ -7,17 +7,17 @@
 %  required:
 %   sources: Cell{Sources} - array of sources obj
 %   array: MicArray - mic array obj
-%   Traj: Trajectory - trajectory obj - with postion x,y,z and time_vector  
+%   Traj: Trajectory - trajectory obj - with postion x,y,z and time_vector 
 %   array with at least two points
-%   
+%
 %  optional:
 %   'Fs': int - samplingrate
 %   'c0': float - sound speed in air - prefer preferably use setGlobalC0
 %    to change that value
-%   'Noise': float - value in db to add noise to data 
+%   'Noise': float - value in db to add noise to data
 %
 % Output:
-%   
+%
 %   varargout{1}: SAudio - Simulated audio for each mic in array
 %   varargout{2}: Sources - Sources with the created audio
 %   varargout{3}: Trajectory - Sources trajectory
@@ -31,7 +31,7 @@ sArgs = containers.Map({'Fs','c0','Noise'},{44100,getGlobalc0,0});
 
 % Optional inputs
 for i=1:2:length(varargin)
-   sArgs(varargin{i}) = varargin{i+1}; 
+   sArgs(varargin{i}) = varargin{i+1};
 end
 
 %%%%%% Sources Properties %%%%%%%%%
@@ -52,6 +52,14 @@ z_mic = reshape(array.position('z'),length(array.position('z')),1);
 for i=1:1:n_sources
     %%%% Source %%%%%%%
     source = sources{i};
+    %%%% Check Fs %%%%%
+    if source.Fs ~= sArgs('Fs')
+        error(strjoin(["Frequency sample doesn't match! Source{", num2str(i), ...
+            "} has a Fs of ", num2str(source.Fs), ...
+            " Hz and the function input value is Fs of ", num2str(sArgs('Fs')), ...
+            " Hz. Therefore, they don't match! Please check your inputs."], ''));
+    end
+    %%%% Get positions from the Source %%%%%
     x_s = pos('x') + source.position('x');
     y_s = pos('y') + source.position('y');
     z_s = pos('z') + source.position('z');
@@ -72,7 +80,7 @@ for i=1:1:n_sources
     %%%%%%% Pressure %%%%%%%%%%%%%%%
     P(:,:,i) = H.*s(i,:);
     %%%%%%% Wave reception time %%%%
-    T_reception(:,:,i) = t + t_ray;   
+    T_reception(:,:,i) = t + t_ray;
 end
 
 %%%% Ignoring interp for some reasons
@@ -82,7 +90,7 @@ end
 
 % min_t = [];
 % max_t = [];
-% 
+%
 % for i=1:1:n_sources
 %     min_t = [min_t min(T_reception(:,:,i),[],2).'];
 %     max_t = [max_t max(T_reception(:,:,i),[],2).'];
